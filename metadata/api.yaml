@@ -1,0 +1,108 @@
+# filename: api.yaml
+
+host: http://127.0.0.1:8099
+
+query_academyAll(success):
+  name: 查询所有学院
+  method: Get
+  url: /api/departments/
+  data: None
+  expected:
+    success: {"count":27,"next":"http://127.0.0.1:8099/api/departments/?None=&page=2","previous":null,"results":[{"dep_id":"T2001N","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T2002N","dep_name":"Test201学院","master_name":"Master201","slogan":""},{"dep_id":"T2005N","dep_name":"Test201学院","master_name":"Master201","slogan":""},{"dep_id":"T2009N","dep_name":"Test201学院","master_name":"Master201","slogan":""},{"dep_id":"T20010N","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T20011N","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T20012N","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T20013N","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"#T20014N#","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T20015N","dep_name":"#Test201学院#","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T20016N","dep_name":"Test201学院","master_name":"#Master201#","slogan":"Slogan201"},{"dep_id":"T20017N","dep_name":"Test201学院","master_name":"Master201","slogan":"#Slogan201#"},{"dep_id":"%T20018N%","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T20019N","dep_name":"%Test201学院%","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T2001aN","dep_name":"Test201学院","master_name":"%Master201%","slogan":"Slogan201"},{"dep_id":"T2001bN","dep_name":"Test201学院","master_name":"Master201","slogan":"%Slogan201%"},{"dep_id":"/T2001cN/","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T2001dN","dep_name":"/Test201学院/","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T2001eN","dep_name":"Test201学院","master_name":"/Master201/","slogan":"Slogan201"},{"dep_id":"T2001fN","dep_name":"Test201学院","master_name":"Master201","slogan":"/Slogan201/"}]}
+    status_code: 200
+
+query_academyAppoint(success):
+  name: 查询指定学院
+  method: Get
+  url: /api/departments/T2001N/
+  data: None
+  expected:
+     success: {"dep_id":"T2001N","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"}
+     status_code: 200
+
+query_academyAppointID(success):
+  name: 指定学院id查询
+  method: Get
+  url: /api/departments/
+  data: {"$dep_id_list": 'T2001N,T2002N,T2005N'}
+  expected:
+    success: {"count":3,"next":null,"previous":null,"results":[{"dep_id":"T2001N","dep_name":"Test201学院","master_name":"Master201","slogan":"Slogan201"},{"dep_id":"T2002N","dep_name":"Test201学院","master_name":"Master201","slogan":""},{"dep_id":"T2005N","dep_name":"Test201学院","master_name":"Master201","slogan":""}]}
+    status_code: 200
+
+query_academyAppointMaster(success):
+  name: 指定院长名称查询
+  method: Get
+  url: /api/departments/
+  data: {"$master_name_list": "龙捷"}
+  expected:
+    success: {"count":1,"next":null,"previous":null,"results":[{"dep_id":"T001","dep_name":"传智学院","master_name":"龙捷","slogan":"不睡觉"}]}
+    status_code: 200
+
+query_academyBlur(success):
+  name: 模糊查询
+  method: Get
+  url: /api/departments/
+  data: {"blur": "1", "dep_name": "智"}
+  expected:
+    success: {"count":1,"next":null,"previous":null,"results":[{"dep_id":"T001","dep_name":"传智学院","master_name":"龙捷","slogan":"不睡觉"}]}
+    status_code: 200
+
+query_academyCombin(success):
+  name: 组合查询
+  method: Get
+  url: /api/departments/
+  data: {"dep_name": "传智学院", "master_name": "龙捷", "slogan": "不睡觉"}
+  expected:
+    success: {"count":1,"next":null,"previous":null,"results":[{"dep_id":"T001","dep_name":"传智学院","master_name":"龙捷","slogan":"不睡觉"}]}
+    status_code: 200
+
+add_academy_1(success):
+  name: 新增学院
+  method: Post
+  url: /api/departments/
+  data: {"data":[{"dep_id":"T01","dep_name":"土力院","master_name": "汪亚民","slogan":"打灰"}]}
+  expected:
+    success: {"already_exist":{"count":0,"results":[]},"create_success":{"count":1,"results":[{"dep_id":"T01","dep_name":"土力院","master_name":"汪亚民","slogan":"打灰"}]}}
+
+add_academy_2(success):
+  name: 新增学院
+  method: Post
+  url: /api/departments/
+  data: {"data":[{"dep_id":"T001","dep_name":"信息院","master_name": "汪亚民","slogan":"不打灰"}]}
+  expected:
+    success: {"already_exist":{"count":0,"results":[]},"create_success":{"count":1,"results":[{"dep_id":"T001","dep_name":"信息院","master_name":"汪亚民","slogan":"不打灰"}]}}
+
+add_academy_3(success):
+  name: 新增学院
+  method: Post
+  url: /api/departments/
+  data: {"data":[{"dep_id":"T002","dep_name":"工管院","master_name": "汪亚民","slogan":"还是不打灰"}]}
+  expected:
+    success: {"already_exist":{"count":0,"results":[]},"create_success":{"count":1,"results":[{"dep_id":"T002","dep_name":"工管院","master_name":"汪亚民","slogan":"还是不打灰"}]}}
+
+update_academy(success):
+  name: 更新学院信息
+  method: Put
+  url: /api/departments/T01/
+  data: {"data":[{"dep_id":"T01","dep_name":"土力院","master_name": "汪亚民","slogan":"不打灰"}]}
+  expected:
+     success: {"dep_id":"T01","dep_name":"土力院","master_name":"汪亚民","slogan":"不打灰"}
+     status_code: 200
+
+delete_academy_single(success):
+  name: 删除学院（单个）
+  method: Delete
+  url: /api/departments/T01/
+  data:
+  expected:
+    success: 状态码：204
+    status_code: 204
+
+delete_academy_multiple(success):
+  name: 删除学院（多个）
+  method: Delete
+  url: /api/departments/
+  data: {"$dep_id_list": 'T001,T002'}
+  expected:
+    success: 状态码：204
+    status_code: 204
